@@ -1,54 +1,114 @@
-import React, { useState } from 'react';
-import "./styles.css";
+import React, { useState, useEffect } from 'react';
 
-const App = () => {
-  const [todoText, setTodoText] = useState('');
-  const [incompleteTodos, setIncompleteTodos] = useState(['aaaaa', 'bbbbb']);
-  const [completeTodos, setCompleteTodos] = useState(['ccccc']);
+export default function App() {
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+    if (savedTodos) {
+      return JSON.parse(savedTodos);
+    } else {
+      return [];
+  }
+});
 
-const onChangeTodoText = (event) => setTodoText(event.target.value);
-const onClickAdd = () => {
-  if (todoText === "") return;
-  const newTodos = [...incompleteTodos, todoText];
-  setIncompleteTodos(newTodos);
-  setTodoText("");
-};
+  const [todo, setTodo] = useState("");
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentTodo, setCurrentTodo] = useState({});
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
+  function handleInputChange(e) {
+    setTodo(e.target.value);
+  }
+
+  function handleEditInputChange(e) {
+    setCurrentTodo({...currentTodo, text: e.target.value });
+    console.log(currentTodo);
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+
+    if (todo !== "") {
+      setTodos([
+        ...todos,
+        {
+          id: todos.length + 1,
+          text: todo.trim()
+        }
+      ]);
+    }
+    setTodo("");
+  }
+
+  function handleEditFormSubmit(e) {
+    e.preventDefault();
+
+    handleUpdateTodo(currentTodo.id, currentTodo);
+  }
+
+  function handleDeleteClick(id) {
+    const removeItem = todos.filter((todo) => {
+      return todo.id !== id;
+    });
+    setTodos(removeItem);
+  }
+
+  function handleUpdateTodo(id, updatedTodo) {
+    const updatedItem = todos.map((todo) => {
+      return todo.id === id ? updatedTodo : todo;
+    });
+    setIsEditing(false);
+    setTodos(updatedItem);
+  }
+
+  function handleEditClick(todo) {
+    setIsEditing(true);
+    setCurrentTodo({ ...todo });
+  }
 
   return (
-    <>
-      <div className="input-area">
-        <input placeholder= "TODOを入力" value={todoText} onChange={onChangeTodoText} />
-        <button onClick={onClickAdd}>追加</button>
-      </div>
-      <div className="incomplete-area">
-        <p className="title">未完了のTODO</p>
-        <ul>
-          {incompleteTodos.map((todo) => {
-            return (
-              <div key={todo} className="list-row">
-                <li>{todo}</li>
-                <button>完了</button>
-                <button>削除</button>
-              </div>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="complete-area">
-      <p className="title">完了のTODO</p>
-        <ul>
-          {completeTodos.map((todo) => {
-            return (
-              <div key={todo} className="list-row">
-                <li>{todo}</li>
-                <button>戻す</button>
-              </div>
-            );
-          })}
-        </ul>
-      </div>
-    </>
-  );
-};
+    <div className="App">
+      {isEditing ? (
+        <form onSubmit={handleEditFormSubmit}>
+          <h2>Edit Todo</h2>
+          <label htmlFor="editTodo">Edit todo: </label>
+          <input
+            name="editTodo"
+            type="text"
+            placeholder="todoを編集する"
+            value={currentTodo.text}
+            onChange={handleEditInputChange}
+          />
+          <button type="submit">更新</button>
+          <button onClick={() => setIsEditing(false)}>キャンセル</button>
+        </form>
+      ) : (
+      <form onSubmit={handleFormSubmit}>
+        <h2>Add Todo</h2>
+        <label htmlFor="todo">Add todo: </label>
+        <input
+        name="todo"
+        type="text"
+        placeholder="新しいtodoを作成する"
+        value={todo}
+        onChange={handleInputChange}
+        />
+        <button type="submit">作成</button>
+      </form>
+      )}
 
-export default App;
+    <ul className="todo-list">
+      {todos.map((todo) => (
+        <li key={todo.id}>
+          {todo.text}
+          <button onClick={() => handleEditClick(todo)}>編集</button>
+          <button onClick={() => handleDeleteClick(todo.id)}>削除</button>
+        </li>
+      ))}
+    </ul>
+  </div>
+  );
+}
