@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
   const [todos, setTodos] = useState(() => {
@@ -88,7 +89,7 @@ export default function App() {
       ) : (
       <form onSubmit={handleFormSubmit}>
         <h2>Add Todo</h2>
-        <label htmlFor="todo">Add todo: </label>
+        <label htmlFor="todo">ToDo : </label>
         <input
         name="todo"
         type="text"
@@ -96,16 +97,16 @@ export default function App() {
         value={todo}
         onChange={handleInputChange}
         />
-        <button type="submit">作成</button>
+        <button type="submit" class="btn btn-info mx-2">作成</button>
       </form>
       )}
 
-    <ul className="todo-list">
+    <ul className="todo-list my-2">
       {todos.map((todo) => (
-        <li key={todo.id}>
+        <li key={todo.id} className="my-2">
           {todo.text}
-          <button onClick={() => handleEditClick(todo)}>編集</button>
-          <button onClick={() => handleDeleteClick(todo.id)}>削除</button>
+          <button class="btn btn-success ml-5" onClick={() => handleEditClick(todo)}>編集</button>
+          <button class="btn btn-danger mx-2"onClick={() => handleDeleteClick(todo.id)}>削除</button>
         </li>
       ))}
     </ul>
