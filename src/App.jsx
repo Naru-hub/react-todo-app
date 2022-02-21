@@ -124,20 +124,20 @@ const App = () => {
           <h1>ToDo List</h1>
           <ul>
             {todos.map((todo) => (
-          <li key={todo.id} className="my-2">
-            {todo.title}
-            <select value={selectedValue} onChange={handleStatusChange}>
-              <option value='notStarted'>未着手</option>
-              <option value='inProgress'>進行中</option>
-              <option value='done'>完了</option>
-            </select>
-            {/**handleEditClick関数 todoオブジェクトを引数として渡す*/}
-            <button className="btn btn-success mx-2" onClick={() => handleEditClick(todo)}>編集</button>
-            <button className="btn btn-danger" onClick={() => handleDeleteClick(todo.id)}>削除</button>
-          </li>
-          ))}
-        </ul>
-      </div>
+              <li key={todo.id} className="my-2">
+                {todo.title}
+                <select value={selectedValue} onChange={handleStatusChange}>
+                  <option value='notStarted'>未着手</option>
+                  <option value='inProgress'>進行中</option>
+                  <option value='done'>完了</option>
+                </select>
+                {/**handleEditClick関数 todoオブジェクトを引数として渡す*/}
+                <button className="btn btn-success mx-2" onClick={() => handleEditClick(todo)}>編集</button>
+                <button className="btn btn-danger" onClick={() => handleDeleteClick(todo.id)}>削除</button>
+              </li>
+            ))}
+          </ul>
+        </div>
     </>
   );
 };
