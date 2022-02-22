@@ -35,6 +35,8 @@ const App = () => {
           status: "notStarted"
         }
       ]);
+    } else {
+      alert('todoのタイトルを入力してください');
     }
     //formの値を空にする
     setTodo("");
@@ -99,7 +101,7 @@ const App = () => {
             name="editTodo"
             type="text"
             placeholder="todoを編集する"
-            value={currentTodo.text}
+            value={currentTodo.title}
             onChange={handleEditInputChange}
             />
             <button type="submit" className="btn btn-success mx-1">編集する</button>
