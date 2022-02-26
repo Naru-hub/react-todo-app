@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-//todoをtodosの配列で持つ
 const App = () => {
+  //todoをtodosの配列で持つ
   const [todos, setTodos] = useState([]);
 
   //入力値を追跡
@@ -55,16 +55,16 @@ const App = () => {
     const todosList = [...todos];
     switch(e.target.value) {
       case "進行中":  // 進行中
-          todosList[index].status = "進行中";
-          setTodos(todosList);
+        todosList[index].status = "進行中";
+        setTodos(todosList);
         break;
       case "完了":   // 完了
-          todosList[index].status = "完了";
-          setTodos(todosList);
+        todosList[index].status = "完了";
+        setTodos(todosList);
         break;
       default :  //未着手
-          todosList[index].status = "未着手";
-          setTodos(todosList);
+        todosList[index].status = "未着手";
+        setTodos(todosList);
         break;
     }
   }
