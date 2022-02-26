@@ -7,16 +7,10 @@ const App = () => {
   //入力値を追跡
   const [todo, setTodo] = useState("");
 
-
   //編集モードかどうかをbool値で判断
   const [isEditing, setIsEditing] = useState(false);
   //編集するToDoアイテムがわかるように設定するオブジェクトの状態
   const [currentTodo, setCurrentTodo] = useState({});
-
-
-  //status変更
-  const [selectedValue, setSelectedValue] = useState('notStarted');
-
 
   //formの入力値を受け取る関数
   const handleInputChange = (e) => {
@@ -26,13 +20,14 @@ const App = () => {
   //todo作成の関数
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    const status = ["notStarted", "inProgress", "done"];
     if (todo !== "") {
       setTodos([
         ...todos,   //状態の現在の値をコピー
         {
           id: todos.length + 1,
           title: todo.trim(),
-          status: "notStarted"
+          status: status[0],
         }
       ]);
     } else {
@@ -42,13 +37,23 @@ const App = () => {
     setTodo("");
   }
 
-  //status変更の値取得
-  // const handleStatusChange = (e, todo) => {
-  //   setTodo({ ...todo, status: setSelectedValue(e.target.value)});
-  //   setTodo({ ...todo });
-  // }
-  const handleStatusChange = (e) => {
-    setSelectedValue(e.target.value)
+  //status変更
+  const handleStatusChange = (e,index) => {
+    const todosList = [...todos];
+    switch(e.target.value) {
+      case "inProgress":
+          todosList[index].status = "inProgress";
+          setTodos(todosList);
+        break;
+      case "done":
+          todosList[index].status = "done";
+          setTodos(todosList);
+        break;
+      default :
+          todosList[index].status = "notStarted";
+          setTodos(todosList);
+        break;
+    }
   }
 
   //todosの配列からtodoを削除する関数
@@ -125,10 +130,10 @@ const App = () => {
         <div>
           <h1>ToDo List</h1>
           <ul>
-            {todos.map((todo) => (
+            {todos.map((todo, index) => (
               <li key={todo.id} className="my-2">
                 {todo.title}
-                <select value={selectedValue} onChange={handleStatusChange}>
+                <select onChange={(e) => handleStatusChange(e,index)}>
                   <option value='notStarted'>未着手</option>
                   <option value='inProgress'>進行中</option>
                   <option value='done'>完了</option>
