@@ -203,8 +203,8 @@ const App = () => {
               {filteredTodos.map((todo, index) => (
                 <li key={todo.id} className="my-2">
                   {todo.title}
-                  <select value={todo.status} onChange={(e) => handleStatusChange(e,index)}>
-                    <option value={todo.status} selected>{todo.status}</option>
+                  <select defaultValue={todo.status} onChange={(e) => handleStatusChange(e,index)}>
+                    <option value={todo.status}>{todo.status}</option>
                     <option value='未着手'>未着手</option>
                     <option value='進行中'>進行中</option>
                     <option value='完了'>完了</option>
