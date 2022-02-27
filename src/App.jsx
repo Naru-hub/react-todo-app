@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
@@ -12,14 +12,6 @@ const App = () => {
   const [isEditing, setIsEditing] = useState(false);
   //編集するToDoアイテムがわかるように設定するオブジェクトの状態
   const [currentTodo, setCurrentTodo] = useState({});
-
-  //ラジオボタンにセットしたい項目の配列
-  // const statusFilters = [
-  //   {id:1, value: 'all', label: 'すべて'},
-  //   {id:2, value: 'notStarted', label: '未着手'},
-  //   {id:3, value: 'inProgress', label: '進行中'},
-  //   {id:4, value: 'done', label: '完了'},
-  // ];
 
   //status別に新たにtodoを設定する
   const [filteredTodos, setFilteredTodos] = useState([]);
@@ -193,8 +185,8 @@ const App = () => {
               {todos.map((todo, index) => (
                 <li key={todo.id} className="my-2">
                   {todo.title}
-                  <select onChange={(e) => handleStatusChange(e,index)}>
-                    <option value={todo.status} selected>{todo.status}</option>
+                  <select defaultValue={todo.status} onChange={(e) => handleStatusChange(e,index)}>
+                    <option value={todo.status}>{todo.status}</option>
                     <option value='未着手'>未着手</option>
                     <option value='進行中'>進行中</option>
                     <option value='完了'>完了</option>
