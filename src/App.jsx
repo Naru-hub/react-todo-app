@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
@@ -43,7 +43,11 @@ const App = () => {
   }
 
   //status変更(selectboxでの値変更処理)
-  const handleStatusChange = (e,index) => {
+  const handleStatusChange = (e,selectedId) => {
+    //idで選択された配列を抽出
+    const index = todos.findIndex((todo) => todo.id === selectedId);
+
+    //selectboxで選択されたstatusの値をsetTodosに入れ設定する
     const todosList = [...todos];
     switch(e.target.value) {
       case "進行中":  // 進行中
@@ -69,25 +73,25 @@ const App = () => {
     });
     //removeItemは新しい配列を返す
     setTodos(removeItem);
-  }
+  };
 
   //「編集」ボタンがクリックされたときに処理する機能
   const handleEditClick = (todo) => {
     setIsEditing(true);   //編集時はtrue
     setCurrentTodo({ ...todo }); //currentTodoをクリックされたtodoアイテムに設定
-  }
+  };
 
   //編集入力の値を取得し、新しい状態を設定する関数
   const handleEditInputChange = (e) => {
     //新しい状態の値を、現在編集入力ボックスにあるものに設定
     setCurrentTodo({ ...currentTodo, title: e.target.value });
-  }
+  };
 
   //編集するボタンを押してToDoアイテムを実際に更新するhandleUpdateTodo関数を呼び出す
   const handleEditFormSubmit = () => {
     //handleUpdateTodo関数を呼び出す-currentTodo.idとcurrentTodoオブジェクトを引数として渡す
     handleUpdateTodo(currentTodo.id, currentTodo);
-  }
+  };
 
   //ToDoアイテムを編集する機能
   //todos配列にtodo.idが関数に渡すIDと一致するかどうかを確認、IDが一致する場合は、2番目のパラメーター（updatedTodo）を使用して更新されたtodoオブジェクトを渡し、それ以外の場合は、古いtodoを使用
@@ -98,18 +102,22 @@ const App = () => {
     //編集モードをfalseに設定、編集が終了したことを意味する
     setIsEditing(false);
     setTodos(updatedItem); //更新されたtodoでtodos状態を更新する
-  }
+  };
 
-  //todoのstatusの値でfilterの条件を分け、新たなtodo配列を作る
+  //ラジオボタンで設定されたtodoのstatusの値でfilterの条件を分け、新たなtodos配列を作る
   const handleFilterChange = (e) => {
     setRadio(e.target.value);
     switch (e.target.value) {
       case "未着手":
-        const notStartedTodos = [...todos].filter((todo) => todo.status === "未着手");
+        const notStartedTodos = [...todos].filter(
+          (todo) => todo.status === "未着手"
+        );
         setFilteredTodos(notStartedTodos);
         break;
       case "進行中":
-        const inprogressTodos = [...todos].filter((todo) => todo.status === "進行中");
+        const inprogressTodos = [...todos].filter(
+          (todo) => todo.status === "進行中"
+        );
         setFilteredTodos(inprogressTodos);
         break;
       case "完了":
@@ -120,8 +128,16 @@ const App = () => {
         setFilteredTodos(todos);
         break;
       }
-  }
+  };
 
+  //filterした後のtodosに入っているtodoのstatusの値が変更された時に随時、変更を反映させる
+  useEffect(() => {
+    let filteredTodo = [];
+    todos.map((todo) => {
+      if (todo.status === radio) filteredTodo.push(todo);
+    });
+    setFilteredTodos(filteredTodo);
+  }, [todos]);
 
   return (
     <>
@@ -137,8 +153,19 @@ const App = () => {
             value={currentTodo.title}
             onChange={handleEditInputChange}
             />
-            <button type="button" onClick={(e) => handleEditFormSubmit(e)} className="btn btn-success mx-1">編集する</button>
-            <button onClick={() => setIsEditing(false)} className="btn btn-info">キャンセル</button>
+            <button
+            type="button"
+            onClick={(e) => handleEditFormSubmit(e)}
+            className="btn btn-success mx-1"
+            >
+              編集する
+            </button>
+            <button
+            onClick={() => setIsEditing(false)}
+            className="btn btn-info"
+            >
+              キャンセル
+            </button>
           </div>
         ) : (
           /** todo作成モード */
@@ -152,66 +179,115 @@ const App = () => {
             value={todo}
             onChange={handleInputChange}  //handleInputChange formの入力値を受け取る関数
             />
-            <button type="button" onClick={(e) => handleFormSubmit(e) } className="btn btn-primary mx-2">作成</button>
+            <button
+            type="button"
+            onClick={(e) => handleFormSubmit(e) }
+            className="btn btn-primary mx-2"
+            >
+              作成
+            </button>
           </div>
         )}
 
-        {/* ラジオボタン todo status別にfilterで出し分け */}
+        {/* ラジオボタン todoのstatus別にfilterで出し分け */}
         <div>
           <label className="mx-1">
-            <input type="radio" value="all" onChange={(e) => handleFilterChange(e)} checked={radio === 'all'} />
+            <input
+            type="radio"
+            value="all"
+            onChange={(e) => handleFilterChange(e)} checked={radio === 'all'}
+            />
             すべて
           </label>
           <label className="mx-1">
-            <input type="radio" value="未着手" onChange={(e) => handleFilterChange(e)} checked={radio === '未着手'} />
+            <input
+            type="radio"
+            value="未着手"
+            onChange={(e) => handleFilterChange(e)}
+            checked={radio === '未着手'}
+            />
             未着手
           </label>
           <label className="mx-1">
-            <input type="radio" value="進行中" onChange={(e) => handleFilterChange(e)} checked={radio === '進行中'} />
+            <input
+            type="radio"
+            value="進行中"
+            onChange={(e) => handleFilterChange(e)}
+            checked={radio === '進行中'}
+            />
             進行中
           </label>
           <label className="mx-1">
-            <input type="radio" value="完了" onChange={(e) => handleFilterChange(e)} checked={radio === '完了'} />
+            <input
+            type="radio"
+            value="完了"
+            onChange={(e) => handleFilterChange(e)}
+            checked={radio === '完了'}
+            />
             完了
           </label>
         </div>
 
         <div>
           <h1>ToDo List</h1>
-          {/** すべてtodoのListとstatus別のtodoのListの条件分岐 */}
+          {/** すべてのtodoのListとstatus別のtodoのListの条件分岐 */}
           {radio === "all"? (
-            /* すべてtodoのList */
+            /* すべてのtodoのList */
             <ul>
-              {todos.map((todo, index) => (
+              {todos.map((todo) => (
                 <li key={todo.id} className="my-2">
                   {todo.title}
-                  <select defaultValue={todo.status} onChange={(e) => handleStatusChange(e,index)}>
+                  <select
+                  defaultValue={todo.status}
+                  onChange={(e) => handleStatusChange(e, todo.id)}
+                  >
                     <option value={todo.status}>{todo.status}</option>
                     <option value='未着手'>未着手</option>
                     <option value='進行中'>進行中</option>
                     <option value='完了'>完了</option>
                   </select>
-                  {/**handleEditClick関数 todoオブジェクトを引数として渡す*/}
-                  <button className="btn btn-success mx-2" onClick={() => handleEditClick(todo)}>編集</button>
-                  <button className="btn btn-danger" onClick={() => handleDeleteClick(todo.id)}>削除</button>
+                  <button
+                  className="btn btn-success mx-2"
+                  onClick={() => handleEditClick(todo)}
+                  >
+                    編集
+                  </button>
+                  <button
+                  className="btn btn-danger"
+                  onClick={() => handleDeleteClick(todo.id)}
+                  >
+                    削除
+                  </button>
                 </li>
               ))}
             </ul>
           ) : (
             /* status別にfilterで分けたtodoのList */
             <ul>
-              {filteredTodos.map((todo, index) => (
+              {filteredTodos.map((todo) => (
                 <li key={todo.id} className="my-2">
                   {todo.title}
-                  <select defaultValue={todo.status} onChange={(e) => handleStatusChange(e,index)}>
+                  <select
+                  defaultValue={todo.status}
+                  onChange={(e) => handleStatusChange(e, todo.id)}
+                  >
                     <option value={todo.status}>{todo.status}</option>
                     <option value='未着手'>未着手</option>
                     <option value='進行中'>進行中</option>
                     <option value='完了'>完了</option>
                   </select>
-                  {/**handleEditClick関数 todoオブジェクトを引数として渡す*/}
-                  <button className="btn btn-success mx-2" onClick={() => handleEditClick(todo)}>編集</button>
-                  <button className="btn btn-danger" onClick={() => handleDeleteClick(todo.id)}>削除</button>
+                  <button
+                  className="btn btn-success mx-2"
+                  onClick={() => handleEditClick(todo)}
+                  >
+                    編集
+                  </button>
+                  <button
+                  className="btn btn-danger"
+                  onClick={() => handleDeleteClick(todo.id)}
+                  >
+                    削除
+                  </button>
                 </li>
               ))}
             </ul>
