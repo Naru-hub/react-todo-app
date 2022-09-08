@@ -17,19 +17,26 @@ https://react-todo-app-beige-mu.vercel.app/
 
 ### `Todoをステータス別に出し分け`
 
-・ステータスが未着手の Todo
-<img width="770" alt="ステータス未着手 2022-09-04 21 51 52" src="https://user-images.githubusercontent.com/81672054/189019146-9c0911be-a416-491d-b043-aac4b1d3ee99.png">  
- ・ステータスが進行中の Todo
-<img width="763" alt="ステータス進行中 2022-09-04 21 52 01" src="https://user-images.githubusercontent.com/81672054/189019478-66e5f83f-7868-4225-88b0-3ee2b3d9a5c0.png">  
-・ステータスが完了の Todo  
+・ステータスが`未着手`の Todo 
+
+<img width="770" alt="ステータス未着手 2022-09-04 21 51 52" src="https://user-images.githubusercontent.com/81672054/189019146-9c0911be-a416-491d-b043-aac4b1d3ee99.png"> 
+
+ ・ステータスが`進行中`の Todo 
+ 
+<img width="763" alt="ステータス進行中 2022-09-04 21 52 01" src="https://user-images.githubusercontent.com/81672054/189019478-66e5f83f-7868-4225-88b0-3ee2b3d9a5c0.png"> 
+
+・ステータスが`完了`の Todo 
+
 <img width="796" alt="ステータス完了 2022-09-04 21 52 10" src="https://user-images.githubusercontent.com/81672054/189019675-f9ea04fd-1148-4473-b96a-1960e673a427.png">
 
 ↑ ステータス別で出した後の Todo のステータスを変更した場合もその変更したステータスの方に Todo が移るように useEffect で随時監視、変更を反映できるようにしています。
 
 ### `Todoを削除`
 
-<img width="738" alt="削除 2022-09-04 22 24 10" src="https://user-images.githubusercontent.com/81672054/189019828-f68782cf-543d-4846-9178-713d8768288b.png">  
-ステータスが完了になったTodoを削除
+<img width="738" alt="削除 2022-09-04 22 24 10" src="https://user-images.githubusercontent.com/81672054/189019828-f68782cf-543d-4846-9178-713d8768288b.png"> 
+
+ステータスが`完了`になったTodoを削除 
+
 <img width="732" alt="スクリーンショット 2022-09-04 22 33 35" src="https://user-images.githubusercontent.com/81672054/189019861-59976182-00a5-490b-80cf-6933587487ff.png">
 
 ### まとめ
